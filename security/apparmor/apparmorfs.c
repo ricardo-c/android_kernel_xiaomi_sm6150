@@ -769,19 +769,21 @@ static ssize_t query_label(char *buf, size_t buf_len,
 			dfa = profile->policy.dfa;
 			state = aa_dfa_match_len(dfa, profile->policy.start[0],
 						 match_str, match_len);
-if (state)
+		}
+		if (state)
 			aa_compute_perms(dfa, state, &tmp);
 		else
 			aa_perms_clear(&tmp);
 		aa_apply_modes_to_perms(profile, &tmp);
 		aa_perms_accum_raw(&perms, &tmp);
-
+	}
 	aa_put_label(label);
 
 	return scnprintf(buf, buf_len,
 		      "allow 0x%08x\ndeny 0x%08x\naudit 0x%08x\nquiet 0x%08x\n",
 		      perms.allow, perms.deny, perms.audit, perms.quiet);
 }
+
 
 /*
  * Transaction based IO.
